@@ -12,6 +12,21 @@ services:
         condition: service_healthy
     command: python -m src.ingestion.camara
 
+  api:
+    build: .
+    container_name: raio_x_api
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/raio_x_db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+
   db:
     image: postgres:15-alpine
     container_name: raio_x_db
