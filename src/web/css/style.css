@@ -1017,3 +1017,24 @@ button {
     }
 
 }
+/* =========================
+   GRÁFICO DE EVOLUÇÃO
+   ========================= */
+
+.grafico-container {
+    position: relative;
+    width: 100%;
+    height: 360px;
+
+    margin-top: 24px;
+
+    padding: 24px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-sm);
+}

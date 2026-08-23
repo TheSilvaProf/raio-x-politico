@@ -15,6 +15,7 @@
         rel="stylesheet"
         href="/web/css/style.css"
     >
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -216,10 +217,8 @@
                         Evolução mensal
                     </h2>
 
-                    <div
-                        id="evolucao"
-                        class="lista-dados"
-                    >
+                    <div class="grafico-container">
+                        <canvas id="grafico-evolucao"></canvas>
                     </div>
 
                 </section>
@@ -524,39 +523,79 @@ function renderizarFornecedores(lista) {
 
 function renderizarEvolucao(lista) {
 
-    const elemento =
-        document.querySelector(
-            "#evolucao"
-        );
+    const canvas =
+        document.querySelector("#grafico-evolucao");
 
+    if (!canvas || !lista || lista.length === 0) {
+        return;
+    }
 
-    elemento.innerHTML =
-        lista.map(item => `
+    const labels = lista.map(
+        item => formatarMes(item.mes)
+    );
 
-            <div class="dado">
+    const valores = lista.map(
+        item => Number(item.total_gasto || 0)
+    );
 
-                <strong>
-                    ${formatarMes(item.mes)}
-                </strong>
+    new Chart(canvas, {
+        type: "line",
 
-                <div>
+        data: {
+            labels: labels,
 
-                    <small>
-                        ${formatarNumero(item.quantidade_despesas)}
-                        despesas
-                    </small>
+            datasets: [
+                {
+                    label: "Gasto mensal",
 
-                    <strong>
-                        ${formatarMoeda(item.total_gasto)}
-                    </strong>
+                    data: valores,
 
-                </div>
+                    tension: 0.35,
 
-            </div>
+                    fill: true
+                }
+            ]
+        },
 
-        `).join("");
+        options: {
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+
+                            return formatarMoeda(
+                                context.raw
+                            );
+
+                        }
+                    }
+                }
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        callback: function(value) {
+                            return formatarMoeda(value);
+                        }
+                    }
+                }
+
+            }
+        }
+    });
 }
-
 
 function renderizarMaioresDespesas(lista) {
 
