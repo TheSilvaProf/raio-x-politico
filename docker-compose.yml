@@ -1,0 +1,12 @@
+
+services:
+  app:
+    build: .
+    container_name: raio_x_app
+    volumes:
+      # Sincroniza o código da sua máquina com o container em tempo real
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Comando padrão executado ao subir
+    command: python -m src.ingestion.camara
