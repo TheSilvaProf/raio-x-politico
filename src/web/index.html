@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Raio-X Político — consulte dados públicos e gastos de políticos brasileiros."
+    >
+
+    <title>Raio-X Político</title>
+
+    <link rel="stylesheet" href="/web/css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-content">
+
+            <a href="/" class="brand">
+                <span class="brand-mark">RX</span>
+                <span class="brand-name">Raio-X Político</span>
+            </a>
+
+            <nav class="main-nav" aria-label="Navegação principal">
+                <a href="#inicio">Início</a>
+                <a href="#deputados">Deputados</a>
+                <a href="#sobre">Sobre</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <section id="inicio" class="hero">
+            <div class="container hero-content">
+
+                <span class="eyebrow">
+                    TRANSPARÊNCIA EM DADOS
+                </span>
+
+                <h1>
+                    Conheça quem<br>
+                    <span>te representa.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Consulte gastos públicos, fornecedores,
+                    categorias de despesas e outros dados
+                    dos deputados federais.
+                </p>
+
+                <div class="search-box">
+                    <label for="search">
+                        Pesquisar deputado
+                    </label>
+
+                    <div class="search-input">
+                        <span aria-hidden="true">⌕</span>
+
+                        <input
+                            id="search"
+                            type="search"
+                            placeholder="Digite o nome do deputado..."
+                            autocomplete="off"
+                        >
+
+                        <button type="button" id="search-button">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section class="stats" aria-label="Resumo dos dados">
+
+            <div class="container stats-grid">
+
+                <article class="stat-card">
+                    <span class="stat-label">
+                        DEPUTADOS
+                    </span>
+
+                    <strong id="total-deputados">
+                        —
+                    </strong>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-label">
+                        DESPESAS ANALISADAS
+                    </span>
+
+                    <strong id="total-despesas">
+                        —
+                    </strong>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-label">
+                        PARTIDOS
+                    </span>
+
+                    <strong id="total-partidos">
+                        —
+                    </strong>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <section id="deputados" class="deputados-section">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">
+                            REPRESENTANTES
+                        </span>
+
+                        <h2>
+                            Deputados federais
+                        </h2>
+                    </div>
+
+                    <span id="resultado-count"></span>
+                </div>
+
+                <div
+                    id="deputados-lista"
+                    class="deputados-grid"
+                >
+                    <div class="loading">
+                        Carregando deputados...
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer id="sobre" class="site-footer">
+
+        <div class="container footer-content">
+
+            <div>
+                <strong>Raio-X Político</strong>
+
+                <p>
+                    Dados públicos para uma política mais transparente.
+                </p>
+            </div>
+
+            <span>
+                Dados públicos • 2026
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <script src="/web/js/app.js" defer></script>
+
+</body>
+</html>

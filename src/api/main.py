@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sqlalchemy import create_engine, text
 import os
 
@@ -14,18 +16,25 @@ app = FastAPI(
     description="API para consulta de dados públicos de políticos",
     version="0.1.0"
 )
+app.mount(
+    "/web",
+    StaticFiles(directory="src/web", html=True),
+    name="web"
+)
+WEB_DIR = "src/web"
 
+@app.get("/", include_in_schema=False)
+def pagina_inicial():
+    return FileResponse(
+        os.path.join(WEB_DIR, "index.html")
+    )
 
-@app.get("/")
-def raiz():
-    return {
-        "nome": "Raio-X Político",
-        "status": "online",
-        "versao": "0.1.0"
-    }
-
-
-@app.get("/deputados")
+app.mount(
+    "/web",
+    StaticFiles(directory=WEB_DIR),
+    name="web"
+)
+@app.get("/api/deputados")
 def listar_deputados():
     query = text("""
         SELECT
@@ -51,7 +60,7 @@ def listar_deputados():
     }
 
 
-@app.get("/deputados/{id_camara}")
+@app.get("/api/deputados/{id_camara}")
 def buscar_deputado(id_camara: int):
     query = text("""
         SELECT
@@ -76,7 +85,7 @@ def buscar_deputado(id_camara: int):
         )
 
     return dict(resultado._mapping)
-@app.get("/deputados/{id_camara}/raio-x")
+@app.get("/api/deputados/{id_camara}/raio-x")
 def raio_x_deputado(id_camara: int):
 
     query_deputado = text("""
