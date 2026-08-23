@@ -28,3 +28,6 @@ Thumbs.db
 *.zip
 *.json
 data/
+
+# Backups locais do banco
+raio_x_backup.sql

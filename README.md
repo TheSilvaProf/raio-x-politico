@@ -1,79 +1,163 @@
-# raio-x-politico
-Projeto para consultar dados públicos e históricos de políticos
+# 🔎 Raio-X Político
 
-🕵️‍♂️ Raio-X Político: Análise CEAP 2026
+Portal para consulta e análise de dados públicos da Câmara dos Deputados.
 
-Este projeto realiza o processamento e análise de dados da Cota para Exercício
-da Atividade Parlamentar (CEAP) da Câmara dos Deputados. Utilizando uma
-arquitetura baseada em containers e scripts de ETL em Python, o sistema
-consolida quase 100 mil registros para identificar padrões de gastos públicos.
+O projeto coleta dados oficiais da Câmara, armazena e organiza as informações
+e disponibiliza uma API para consulta dos deputados e análise de suas despesas
+parlamentares.
 
-📊 Números Atuais (Dez/2025 - Ago/2026)
+## 🏗️ Arquitetura
 
-  - Total de Despesas Processadas: R$ 113.369.371,73
-  - Volume de Registros: 92.986 despesas vinculadas.
-  - Cobertura Parlamentar: 509 dos 513 deputados analisados.
+```text
+Câmara dos Deputados
+        │
+        ▼
+   ETL em Python
+        │
+        ▼
+     Supabase
+   PostgreSQL
+        │
+        ▼
+      FastAPI
+        │
+        ▼
+      Portal
+````
 
-🔍 Principais Insights
+## 📊 Dados atuais
 
-1. Onde está o dinheiro? (Top 5 Categorias)
+* 513 deputados
+* 92.986 registros de despesas
+* Dados da CEAP 2026
+* Fonte: dados públicos da Câmara dos Deputados
 
-| Categoria de Gasto                      | Total Acumulado  |
-| :-------------------------------------- | :--------------- |
-| **Divulgação da Atividade Parlamentar** | R$ 46.707.406,74 |
-| **Locação de Veículos Automotores**     | R$ 24.335.707,38 |
-| **Manutenção de Escritórios de Apoio**  | R$ 18.675.125,46 |
-| **Combustíveis e Lubrificantes**        | R$ 14.497.347,81 |
-| **Hospedagem**                          | R$ 3.023.139,60  |
+## 🔎 Funcionalidades
 
-2. Maiores Recebedores (Top 5 Fornecedores)
+### Consulta de deputados
 
-O Facebook lidera o ranking, evidenciando o foco massivo em marketing digital e
-impulsionamento, seguido por empresas de logística e frotas.
+```text
+GET /api/deputados
+```
 
-1.  Facebook Serviços Online do Brasil: R$ 2.054.670,00
-2.  PANTANAL VEÍCULOS LTDA: R$ 1.288.177,64
-3.  NOVACAR LOCADORA DE VEICULOS: R$ 834.280,80
-4.  SUPREMA MOBILIDADE LTDA: R$ 763.281,00
-5.  HPE AUTOMOTORES DO BRASIL: R$ 508.097,82
+Lista os deputados disponíveis.
 
-3. Deputados com Maior Volume de Gastos
+### Perfil do deputado
 
-| Deputado            | Partido      | UF | Total Gasto   |
-| :------------------ | :----------- | :- | :------------ |
-| **Carlos Veras**    | PT           | PE | R$ 439.309,09 |
-| **Robinson Faria**  | PP           | RN | R$ 411.834,94 |
-| **Átila Lins**      | PSD          | AM | R$ 391.828,29 |
-| **Geraldo Resende** | UNIÃO        | MS | R$ 391.768,40 |
-| **Albuquerque**     | REPUBLICANOS | RR | R$ 386.380,91 |
+```text
+GET /api/deputados/{id_camara}
+```
 
-🛠️ Stack Tecnológica
+Retorna informações básicas do parlamentar.
 
-  - Linguagem: Python 3.11
-  - Bibliotecas: Pandas (ETL), SQLAlchemy (ORM), Requests.
-  - Banco de Dados: PostgreSQL 15 (Dockerizada).
-  - Sistema Operacional: Kali Linux.
+### Raio-X financeiro
 
-🛡️ Qualidade e Transparência de Dados
+```text
+GET /api/deputados/{id_camara}/raio-x
+```
 
-  - Relacionamento: Vinculação via id_camara (unificação de dados da API e do
-    CSV oficial).
-  - Tratamento de Exceções: 1.238 registros (0.23% do valor total) apresentaram
-    data nula no arquivo oficial e foram catalogados para auditoria separada.
-  - Deputados sem gastos no período: Amom Mandel, Nivaldo Albuquerque, Priscila
-    Costa e Roseana Sarney.
+Apresenta:
 
-✅ O que fazer agora para publicar:
+* quantidade de despesas;
+* total gasto;
+* gasto médio;
+* categorias de despesas;
+* principais fornecedores;
+* evolução mensal;
+* maiores despesas.
 
+## 🛠️ Stack
 
+* Python 3.11
+* FastAPI
+* SQLAlchemy
+* PostgreSQL
+* Supabase
+* Pandas
+* Requests
+* Docker
 
+## 🚀 Ambiente
 
+O desenvolvimento local utiliza Docker Compose.
 
+Em produção, a API será executada no Render e utilizará o PostgreSQL
+hospedado no Supabase.
 
+A conexão com o banco é configurada através da variável de ambiente:
 
+```text
+DATABASE_URL
+```
 
+Nenhuma credencial de banco deve ser armazenada no código ou no Git.
 
+## 📁 Estrutura
 
+```text
+raio-x-politico/
+├── src/
+│   ├── api/
+│   │   └── main.py
+│   ├── database/
+│   │   └── models.py
+│   ├── ingestion/
+│   │   └── camara.py
+│   ├── web/
+│   │   └── index.html
+│   └── config.py
+├── tests/
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+```
 
+## 🎯 Objetivo
 
+Construir uma ferramenta simples e transparente para que qualquer pessoa
+possa consultar dados públicos de parlamentares e compreender como os
+recursos da atividade parlamentar são utilizados.
+
+````
+
+### Por que eu prefiro isso?
+
+Porque o README atual contém números e análises que podem ficar rapidamente desatualizados, além de dizer:
+
+> `Banco de Dados: PostgreSQL 15 (Dockerizada)`
+
+Isso **já não representa nossa arquitetura de produção**.
+
+E também temos esta afirmação:
+
+> `Cobertura Parlamentar: 509 dos 513 deputados analisados.`
+
+Mas acabamos de confirmar que a tabela `deputados` tem **513 registros**. Então não quero deixar uma informação potencialmente conflitante no README.
+
+---
+
+### Mas não vamos editar ainda
+
+Temos uma decisão importante aqui.
+
+**Eu sugiro que você substitua o README inteiro pelo modelo acima**, mas antes quero que façamos isso conscientemente, porque estamos entrando na fase de publicação.
+
+Se você topar, o próximo comando é simplesmente:
+
+```bash
+nano README.md
+````
+
+e substituímos o conteúdo.
+
+Depois:
+
+```bash
+git diff
+```
+
+E **antes de commitarmos**, eu reviso o diff com você.
+
+Isso mantém nosso processo no estilo que você gosta: **uma mudança por vez, testada antes da próxima.**
 
