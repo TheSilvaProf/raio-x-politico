@@ -93,7 +93,8 @@ def raio_x_deputado(id_camara: int):
             id_camara,
             nome,
             partido,
-            uf
+            uf,
+            url_foto
         FROM deputados
         WHERE id_camara = :id_camara
     """)

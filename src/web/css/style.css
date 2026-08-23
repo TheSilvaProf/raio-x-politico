@@ -725,3 +725,295 @@ button {
         padding: 22px;
     }
 }
+/* =========================
+   PERFIL DO DEPUTADO
+   ========================= */
+
+.perfil {
+    padding-top: 48px;
+    padding-bottom: 100px;
+}
+
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 48px;
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: color 160ms ease;
+}
+
+
+.voltar:hover {
+    color: var(--accent);
+}
+
+
+.perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    margin-bottom: 48px;
+}
+
+
+.perfil-avatar {
+    width: 88px;
+    height: 88px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 24px;
+
+    background: var(--accent);
+    color: white;
+
+    font-size: 24px;
+    font-weight: 800;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: var(--shadow-md);
+}
+
+
+.perfil-header h1 {
+    margin-top: 4px;
+
+    font-size: clamp(36px, 5vw, 56px);
+
+    line-height: 1;
+
+    letter-spacing: -0.045em;
+}
+
+
+.perfil-meta {
+    margin-top: 10px;
+
+    color: var(--text-secondary);
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   MÉTRICAS
+   ========================= */
+
+.metricas {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 64px;
+}
+
+
+.metrica {
+    padding: 28px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+.metrica span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.metrica strong {
+    display: block;
+
+    font-size: 28px;
+
+    letter-spacing: -0.03em;
+}
+
+
+/* =========================
+   SEÇÕES
+   ========================= */
+
+.secao {
+    margin-top: 64px;
+}
+
+
+.secao h2 {
+    margin-bottom: 24px;
+
+    font-size: 28px;
+
+    line-height: 1.1;
+
+    letter-spacing: -0.035em;
+}
+
+
+.secao-header {
+    margin-bottom: 24px;
+}
+
+
+/* =========================
+   LISTAS
+   ========================= */
+
+.lista-dados {
+    overflow: hidden;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-sm);
+}
+
+
+.dado {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding: 20px 24px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.dado:last-child {
+    border-bottom: 0;
+}
+
+
+.dado > div {
+    min-width: 0;
+}
+
+
+.dado strong {
+    display: block;
+
+    font-size: 14px;
+}
+
+
+.dado > strong {
+    flex-shrink: 0;
+
+    font-size: 15px;
+
+    text-align: right;
+}
+
+
+.dado small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   ESTADOS
+   ========================= */
+
+.estado {
+    padding: 80px 20px;
+
+    color: var(--text-secondary);
+
+    text-align: center;
+}
+
+
+/* =========================
+   RESPONSIVO
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: min(
+            calc(100% - 32px),
+            var(--container)
+        );
+    }
+
+
+    .metricas {
+        grid-template-columns: 1fr;
+    }
+
+
+    .perfil-header {
+        align-items: flex-start;
+    }
+
+
+    .perfil-avatar {
+        width: 68px;
+        height: 68px;
+
+        border-radius: 18px;
+
+        font-size: 18px;
+    }
+
+
+    .perfil-header h1 {
+        font-size: 36px;
+    }
+
+
+    .dado {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .dado > strong {
+        text-align: left;
+    }
+
+}
