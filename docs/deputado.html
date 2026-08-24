@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Raio-X Político</title>
+
+    <link
+        rel="stylesheet"
+        href="/web/css/style.css"
+    >
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="container header-content">
+
+        <a
+            href="/"
+            class="brand"
+        >
+            <div class="brand-mark">
+                RX
+            </div>
+
+            <div class="brand-name">
+                Raio-X Político
+            </div>
+        </a>
+
+        <nav class="main-nav">
+
+            <a href="/">
+                Deputados
+            </a>
+
+            <a href="/">
+                Início
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="perfil">
+
+        <div class="container">
+
+            <a
+                href="/"
+                class="voltar"
+            >
+                ← Voltar para deputados
+            </a>
+
+
+            <div
+                id="carregando"
+                class="estado"
+            >
+                Carregando informações...
+            </div>
+
+
+            <div
+                id="erro"
+                class="estado"
+                style="display: none;"
+            >
+                Não foi possível carregar os dados.
+            </div>
+
+
+            <div
+                id="conteudo"
+                style="display: none;"
+            >
+
+                <div class="perfil-header">
+
+                    <img
+                        id="avatar"
+                        class="perfil-avatar"
+			alt="Foto do deputado"
+                    >         
+
+                    <div>
+
+                        <div class="eyebrow">
+                            RAIO-X PARLAMENTAR
+                        </div>
+
+                        <h1 id="nome">
+                        </h1>
+
+                        <p
+                            id="partido-uf"
+                            class="perfil-meta"
+                        >
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <section class="metricas">
+
+                    <div class="metrica">
+
+                        <span>
+                            Total gasto
+                        </span>
+
+                        <strong id="total-gasto">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="metrica">
+
+                        <span>
+                            Despesas
+                        </span>
+
+                        <strong id="quantidade-despesas">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="metrica">
+
+                        <span>
+                            Gasto médio
+                        </span>
+
+                        <strong id="gasto-medio">
+                            —
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+                <section class="secao">
+
+                    <div class="secao-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                DISTRIBUIÇÃO
+                            </div>
+
+                            <h2>
+                                Categorias de despesas
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="categorias"
+                        class="lista-dados"
+                    >
+                    </div>
+
+                </section>
+
+
+                <section class="secao">
+
+                    <div class="eyebrow">
+                        FORNECEDORES
+                    </div>
+
+                    <h2>
+                        Principais fornecedores
+                    </h2>
+
+                    <div
+                        id="fornecedores"
+                        class="lista-dados"
+                    >
+                    </div>
+
+                </section>
+
+
+                <section class="secao">
+
+                    <div class="eyebrow">
+                        EVOLUÇÃO
+                    </div>
+
+                    <h2>
+                        Evolução mensal
+                    </h2>
+
+                    <div class="grafico-container">
+                        <canvas id="grafico-evolucao"></canvas>
+                    </div>
+
+                </section>
+
+
+                <section class="secao">
+
+                    <div class="eyebrow">
+                        MAIORES DESPESAS
+                    </div>
+
+                    <h2>
+                        Maiores despesas registradas
+                    </h2>
+
+                    <div
+                        id="maiores-despesas"
+                        class="lista-dados"
+                    >
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+const API_BASE_URL =
+    "https://raio-x-politico-api.onrender.com/api";
+
+function escaparHTML(valor) {
+
+    return String(valor ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function obterIniciais(nome) {
+
+    return nome
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(parte => parte[0])
+        .join("")
+        .toUpperCase();
+}
+
+
+function formatarMoeda(valor) {
+
+    return Number(valor || 0).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+}
+
+
+function formatarNumero(valor) {
+
+    return Number(valor || 0)
+        .toLocaleString("pt-BR");
+}
+
+
+function formatarData(data) {
+
+    if (!data) {
+        return "—";
+    }
+
+    return new Date(data + "T00:00:00")
+        .toLocaleDateString("pt-BR");
+}
+
+
+function formatarMes(data) {
+
+    if (!data) {
+        return "—";
+    }
+
+    return new Date(data + "T00:00:00")
+        .toLocaleDateString(
+            "pt-BR",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+}
+
+
+function obterId() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    return params.get("id");
+}
+
+
+async function carregar() {
+
+    const id = obterId();
+
+    if (!id) {
+
+        throw new Error(
+            "Deputado não informado."
+        );
+    }
+
+
+    const resposta =
+        await fetch(
+            `${API_BASE_URL}/deputados/${id}/raio-x`
+        );
+
+
+    if (!resposta.ok) {
+
+        throw new Error(
+            `Erro HTTP: ${resposta.status}`
+        );
+    }
+
+
+    return resposta.json();
+}
+
+
+function renderizar(dados) {
+
+    const deputado =
+        dados.deputado;
+
+    const gastos =
+        dados.gastos;
+
+
+    document.title =
+        `${deputado.nome} — Raio-X Político`;
+
+
+    const avatar =
+    	document.querySelector("#avatar");
+
+    if (deputado.url_foto) {
+    	avatar.src = deputado.url_foto;
+    	avatar.alt = `Foto de ${deputado.nome}`;
+    } else {
+    	avatar.src = "";
+    	avatar.alt = `Foto de ${deputado.nome}`;
+    }
+
+    document.querySelector("#nome")
+        .textContent =
+        deputado.nome;
+
+
+    document.querySelector("#partido-uf")
+        .textContent =
+        `${deputado.partido || "Sem partido"} • ${deputado.uf || "--"}`;
+
+
+    document.querySelector("#total-gasto")
+        .textContent =
+        formatarMoeda(
+            gastos.total_gasto
+        );
+
+
+    document.querySelector("#quantidade-despesas")
+        .textContent =
+        formatarNumero(
+            gastos.quantidade_despesas
+        );
+
+
+    document.querySelector("#gasto-medio")
+        .textContent =
+        formatarMoeda(
+            gastos.gasto_medio
+        );
+
+
+    renderizarCategorias(
+        dados.categorias
+    );
+
+
+    renderizarFornecedores(
+        dados.fornecedores
+    );
+
+
+    renderizarEvolucao(
+        dados.evolucao_mensal
+    );
+
+
+    renderizarMaioresDespesas(
+        dados.maiores_despesas
+    );
+
+
+    document.querySelector("#carregando")
+        .style.display = "none";
+
+
+    document.querySelector("#conteudo")
+        .style.display = "block";
+}
+
+
+function renderizarCategorias(lista) {
+
+    const elemento =
+        document.querySelector(
+            "#categorias"
+        );
+
+
+    elemento.innerHTML =
+        lista.map(item => `
+
+            <div class="dado">
+
+                <div>
+                    <strong>
+                        ${escaparHTML(item.tipo_despesa)}
+                    </strong>
+
+                    <small>
+                        ${formatarNumero(item.quantidade)}
+                        despesas
+                    </small>
+                </div>
+
+                <strong>
+                    ${formatarMoeda(item.total_gasto)}
+                </strong>
+
+            </div>
+
+        `).join("");
+}
+
+
+function renderizarFornecedores(lista) {
+
+    const elemento =
+        document.querySelector(
+            "#fornecedores"
+        );
+
+
+    elemento.innerHTML =
+        lista.map(item => `
+
+            <div class="dado">
+
+                <div>
+
+                    <strong>
+                        ${escaparHTML(item.fornecedor)}
+                    </strong>
+
+                    <small>
+                        ${formatarNumero(item.quantidade_despesas)}
+                        despesas
+                    </small>
+
+                </div>
+
+                <strong>
+                    ${formatarMoeda(item.total_recebido)}
+                </strong>
+
+            </div>
+
+        `).join("");
+}
+
+
+function renderizarEvolucao(lista) {
+
+    const canvas =
+        document.querySelector("#grafico-evolucao");
+
+    if (!canvas || !lista || lista.length === 0) {
+        return;
+    }
+
+    const labels = lista.map(
+        item => formatarMes(item.mes)
+    );
+
+    const valores = lista.map(
+        item => Number(item.total_gasto || 0)
+    );
+
+    new Chart(canvas, {
+        type: "line",
+
+        data: {
+            labels: labels,
+
+            datasets: [
+                {
+                    label: "Gasto mensal",
+
+                    data: valores,
+
+                    tension: 0.35,
+
+                    fill: true
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+
+                            return formatarMoeda(
+                                context.raw
+                            );
+
+                        }
+                    }
+                }
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        callback: function(value) {
+                            return formatarMoeda(value);
+                        }
+                    }
+                }
+
+            }
+        }
+    });
+}
+
+function renderizarMaioresDespesas(lista) {
+
+    const elemento =
+        document.querySelector(
+            "#maiores-despesas"
+        );
+
+
+    elemento.innerHTML =
+        lista.map(item => `
+
+            <div class="dado">
+
+                <div>
+
+                    <strong>
+                        ${escaparHTML(item.tipo_despesa)}
+                    </strong>
+
+                    <small>
+                        ${escaparHTML(item.fornecedor)}
+                        • ${formatarData(item.data)}
+                    </small>
+
+                </div>
+
+                <strong>
+                    ${formatarMoeda(item.valor)}
+                </strong>
+
+            </div>
+
+        `).join("");
+}
+
+
+carregar()
+    .then(renderizar)
+    .catch(erro => {
+
+        console.error(erro);
+
+        document.querySelector(
+            "#carregando"
+        ).style.display = "none";
+
+        document.querySelector(
+            "#erro"
+        ).style.display = "block";
+
+    });
+
+</script>
+
+</body>
+
+</html>
