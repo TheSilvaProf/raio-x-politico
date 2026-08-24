@@ -1,5 +1,5 @@
-const API_BASE_URL = "/api";
-
+const API_BASE_URL =
+    "https://raio-x-politico-api.onrender.com/api";
 
 const elementos = {
     lista: document.querySelector("#deputados-lista"),
