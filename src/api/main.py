@@ -64,8 +64,13 @@ def listar_deputados():
             for row in resultado
         ]
 
+        total_despesas = conn.execute(
+            text("SELECT COUNT(*) FROM despesas")
+        ).scalar()
+
     return {
         "total": len(deputados),
+        "total_despesas": total_despesas,
         "deputados": deputados
     }
 

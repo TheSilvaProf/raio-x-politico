@@ -103,7 +103,7 @@ function renderizarDeputados(lista) {
             return `
                 <a
                     class="deputado-card"
-                    href="/web/deputado.html?id=${deputado.id_camara}"
+                    href="deputado.html?id=${deputado.id_camara}"
                 >
                     <div class="deputado-card-header">
 
@@ -133,7 +133,7 @@ function renderizarDeputados(lista) {
 }
 
 
-function atualizarEstatisticas() {
+function atualizarEstatisticas(dados) {
 
     elementos.totalDeputados.textContent =
         deputados.length.toLocaleString("pt-BR");
@@ -145,6 +145,12 @@ function atualizarEstatisticas() {
                 .map(deputado => deputado.partido)
                 .filter(Boolean)
         ).size.toLocaleString("pt-BR");
+
+
+    elementos.totalDespesas.textContent =
+        Number(
+            dados.total_despesas || 0
+        ).toLocaleString("pt-BR");
 }
 
 
@@ -234,7 +240,7 @@ async function iniciar() {
             dados.deputados || [];
 
 
-        atualizarEstatisticas();
+        atualizarEstatisticas(dados);
 
         renderizarDeputados(
             deputados
