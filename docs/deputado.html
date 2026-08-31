@@ -92,11 +92,18 @@
 
                 <div class="perfil-header">
 
-                    <img
-                        id="avatar"
-                        class="perfil-avatar"
-			alt="Foto do deputado"
-                    >         
+                    <button
+                        id="avatar-button"
+                        class="foto-ampliar"
+                        type="button"
+                        aria-label="Ampliar foto do deputado"
+                    >
+                        <img
+                            id="avatar"
+                            class="perfil-avatar"
+                            alt="Foto do deputado"
+                        >
+                    </button>
 
                     <div>
 
@@ -250,6 +257,29 @@
 
 </main>
 
+
+<div
+    id="foto-modal"
+    class="foto-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Foto ampliada"
+>
+    <button
+        id="foto-modal-fechar"
+        class="foto-modal-fechar"
+        type="button"
+        aria-label="Fechar foto"
+    >
+        ×
+    </button>
+
+    <img
+        id="foto-modal-imagem"
+        class="foto-modal-imagem"
+        alt="Foto ampliada do deputado"
+    >
+</div>
 
 <script>
 
@@ -648,6 +678,75 @@ carregar()
         ).style.display = "block";
 
     });
+
+const avatar =
+    document.querySelector("#avatar");
+
+const fotoModal =
+    document.querySelector("#foto-modal");
+
+const fotoModalImagem =
+    document.querySelector("#foto-modal-imagem");
+
+const fotoModalFechar =
+    document.querySelector("#foto-modal-fechar");
+
+
+avatar.addEventListener("click", () => {
+
+    if (!avatar.src) {
+        return;
+    }
+
+    fotoModalImagem.src =
+        avatar.src;
+
+    fotoModalImagem.alt =
+        avatar.alt;
+
+    fotoModal.classList.add("aberto");
+});
+
+
+function fecharFotoModal() {
+
+    fotoModal.classList.remove("aberto");
+
+    fotoModalImagem.src = "";
+}
+
+
+fotoModalFechar.addEventListener(
+    "click",
+    fecharFotoModal
+);
+
+
+fotoModal.addEventListener(
+    "click",
+    evento => {
+
+        if (evento.target === fotoModal) {
+            fecharFotoModal();
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    evento => {
+
+        if (
+            evento.key === "Escape" &&
+            fotoModal.classList.contains("aberto")
+        ) {
+            fecharFotoModal();
+        }
+
+    }
+);
 
 </script>
 

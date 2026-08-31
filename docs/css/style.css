@@ -764,6 +764,14 @@ button {
     margin-bottom: 48px;
 }
 
+.foto-ampliar {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    cursor: zoom-in;
+}
+
 
 .perfil-avatar {
     width: 88px;
@@ -1037,4 +1045,57 @@ button {
     border-radius: var(--radius-md);
 
     box-shadow: var(--shadow-sm);
+}
+
+/* =========================
+   FOTO AMPLIADA
+   ========================= */
+
+.foto-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.foto-modal.aberto {
+    display: flex;
+}
+
+.foto-modal-imagem {
+    max-width: min(90vw, 600px);
+    max-height: 85vh;
+
+    object-fit: contain;
+
+    border-radius: 18px;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.foto-modal-fechar {
+    position: absolute;
+
+    top: 20px;
+    right: 24px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 36px;
+    line-height: 1;
+
+    cursor: pointer;
 }
